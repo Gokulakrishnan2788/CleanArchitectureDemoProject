@@ -12,24 +12,36 @@ import com.example.demoproject.presentation.posts.PostsRoute
 @Composable
 fun AppNavGraph() {
     val navController = rememberNavController()
-
     NavHost(
         navController = navController,
-        startDestination = "posts"
+        startDestination = Screen.Posts.route
     ) {
-        composable("posts") {
+
+        composable(Screen.Posts.route) {
+
             PostsRoute(
                 onPostClick = { postId ->
-                    navController.navigate("postDetail/$postId")
+                    navController.navigate(
+                        Screen.PostDetail.createRoute(postId)
+                    )
                 }
             )
         }
 
         composable(
-            route = "postDetail/{postId}",
-            arguments = listOf(navArgument("postId") { type = NavType.IntType })
+            route = Screen.PostDetail.route,
+            arguments = listOf(
+                navArgument(Arguments.POST_ID) {
+                    type = NavType.IntType
+                }
+            )
         ) { backStackEntry ->
-            val postId = backStackEntry.arguments?.getInt("postId") ?: 0
+
+            val postId =
+                backStackEntry.arguments?.getInt(
+                    Arguments.POST_ID
+                ) ?: 0
+
             PostDetailScreen(
                 postId = postId,
                 onBack = { navController.popBackStack() }
