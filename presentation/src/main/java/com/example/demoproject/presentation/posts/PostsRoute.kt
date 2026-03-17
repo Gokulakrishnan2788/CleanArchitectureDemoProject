@@ -5,6 +5,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.demoproject.presentation.common.UiState
 
 @Composable
 fun PostsRoute(
@@ -14,7 +15,7 @@ fun PostsRoute(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
-        if (uiState.posts.isEmpty()) {
+        if (uiState is UiState.Loading) {
             viewModel.fetchPosts()
         }
     }

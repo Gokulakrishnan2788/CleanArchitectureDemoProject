@@ -12,11 +12,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.demoproject.domain.posts.model.Post
+import com.example.demoproject.presentation.common.UiState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PostsScreen(
-    uiState: PostsUiState,
+    uiState: UiState<List<Post>>,
     onRefresh: () -> Unit,
     onPostClick: (Int) -> Unit
 ) {
@@ -39,22 +40,51 @@ fun PostsScreen(
                 Text("Refresh Posts")
             }
 
-            if (uiState.isLoading) {
-                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    CircularProgressIndicator()
+            when (val state = uiState) {
+
+                is UiState.Loading -> {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        CircularProgressIndicator()
+                    }
                 }
-            } else if (uiState.errorMessage != null) {
-                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Text(text = uiState.errorMessage, color = Color.Red)
+
+                is UiState.Error -> {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = state.message,
+                            color = Color.Red
+                        )
+                    }
                 }
-            } else {
-                LazyColumn(modifier = Modifier.fillMaxSize()) {
-                    items(uiState.posts) { post ->
-                        PostItem(post = post, onClick = { onPostClick(post.id) })
-                        HorizontalDivider()
+
+                is UiState.Success<*> -> {
+
+                    val posts = state.data as? List<Post> ?: emptyList()
+
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+
+                        items(posts) { post ->
+
+                            PostItem(
+                                post = post,
+                                onClick = { onPostClick(post.id) }
+                            )
+
+                            HorizontalDivider()
+                        }
                     }
                 }
             }
+
+
         }
     }
 }
