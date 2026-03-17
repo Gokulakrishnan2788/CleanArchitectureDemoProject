@@ -1,15 +1,41 @@
-*.iml
-.gradle
-/local.properties
-/.idea/caches
-/.idea/libraries
-/.idea/modules.xml
-/.idea/workspace.xml
-/.idea/navEditor.xml
-/.idea/assetWizardSettings.xml
+# OS files
 .DS_Store
-/build
-/captures
+Thumbs.db
+
+# Android Studio / IntelliJ
+.idea/
+*.iml
+
+# Gradle
+.gradle/
+local.properties
+
+# Build outputs
+/build/
+**/build/
+
+# NDK / C++
 .externalNativeBuild
 .cxx
-local.properties
+
+# Android Studio captures
+/captures
+
+# Log files
+*.log
+
+# Keystore files (important - never commit)
+*.jks
+*.keystore
+
+# Kotlin metadata
+*.kotlin_module
+
+# Generated files
+bin/
+gen/
+out/
+
+# Mac
+*.swp
+*.swo
